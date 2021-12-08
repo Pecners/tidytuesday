@@ -59,3 +59,6 @@ together %>%
          "IMDb viewership based on rating counts.\n" %+%
          "Graph by Spencer Schien (@pecners89) | Data from {datardis} R package and IMDb.\n")
 
+ggsave(filename = "2021/2021-11-23/final_plot.jpeg", device = "jpeg")
+
+

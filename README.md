@@ -16,3 +16,7 @@ Submissions
 ## 2021-12-07
 
 ![Top 10 countries by spider species count](2021/2021-12-07/final_plot.jpeg)
+
+## 2021-11-23
+
+![Viewership of Doctor Who Revival on the decline](2021/2021-11-23/final_plot.jpeg)
