@@ -13,6 +13,10 @@ better.
 Submissions
 ================
 
+## 2021-12-14
+
+![What makes a Spice Girls Song Danceable](2021/2021-12-14/final_plot.jpeg)
+
 ## 2021-12-07
 
 ![Top 10 countries by spider species count](2021/2021-12-07/final_plot.jpeg)
