@@ -68,7 +68,8 @@ df_c %>%
   labs(x = "", y = "",
        title = "What makes a Spice Girls song danceable?",
        subtitle = "Sugar, spice, and a whole lot of valence",
-       caption = "Numbers represent correlation with Spotify's danceability metric.\n" %+%
+       caption =  "Valence is a measure of musical positiveness.\n" %+%
+         "Numbers represent correlation with Spotify's danceability metric.\n" %+%
          "Graph by Spencer Schien (@MrPecners) | Data from Spotify") +
   coord_flip()
 
