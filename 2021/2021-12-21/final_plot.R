@@ -101,8 +101,8 @@ t %>%
          "(while keeping whip),<br>" %+%
          "Starbucks' *Espresso con panna* is the obvious choice",
        caption = str_wrap("Data limited to products that contain caffeine and have whip. " %+%
-         "One size selected per product based on maximum caffeine and minimum calories. " %+%
-         "Graph by Spencer Schien (@MrPecners) | Data from Starbucks", 100))
+         "Poduct specifications (size, milk) chosen for maximum caffeine and minimum calories. " %+%
+         "Graph by Spencer Schien (@MrPecners) | Data from Starbucks", 110))
 
 ggsave(filename = "2021/2021-12-21/final_plot.jpeg", device = "jpeg")
 
