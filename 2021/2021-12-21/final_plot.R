@@ -71,7 +71,7 @@ t %>%
              shape = 21, fill = "#e44c2c",
              size = 3, color = "#006241") +
   geom_text(aes(label = str_wrap(product_name, 30), y = value + .075), 
-            hjust = 0, lineheight = .75, size = 3.5, family = "qs",
+            hjust = 0, lineheight = .75, size = 3.75, family = "qs",
             color = "#016241") +
   scale_y_continuous(limits = c(-1, 1.5), breaks = c(-.9, 1.4),
                      labels = c("<span style='color:#e44c2c;'>**More Calories**</span>",
@@ -86,11 +86,11 @@ t %>%
         axis.text.y = element_blank(),
         panel.grid = element_blank(),
         plot.title.position = "plot",
-        plot.subtitle = element_textbox_simple(size = 13, lineheight = 1, halign = .5,
+        plot.subtitle = element_textbox_simple(size = 14, lineheight = 1, halign = .5,
                                                margin = margin(t = 5, b = 10)),
-        plot.title = element_text(face = "bold", hjust = .5, size = 21, family = "qs"),
+        plot.title = element_text(face = "bold", hjust = .5, size = 24, family = "qs"),
         plot.caption.position = "plot",
-        plot.caption = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 0, size = 10),
         axis.line.x = element_line(arrow = arrow(ends = "both", length = unit(.33, "cm")),
                                    color = "#006241"),
         plot.background = element_rect(fill = "#D4E8E1")) +
@@ -102,7 +102,7 @@ t %>%
          "Starbucks' *Espresso con panna* is the obvious choice",
        caption = str_wrap("Data limited to products that contain caffeine and have whip. " %+%
          "One size selected per product based on maximum caffeine and minimum calories. " %+%
-         "Graph by Spencer Schien (@MrPecners) | Data from Starbucks", 125))
+         "Graph by Spencer Schien (@MrPecners) | Data from Starbucks", 100))
 
 ggsave(filename = "2021/2021-12-21/final_plot.jpeg", device = "jpeg")
 
