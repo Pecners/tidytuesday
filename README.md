@@ -13,9 +13,13 @@ better.
 Submissions
 ================
 
+## 2021-12-21
+
+![Starbucks coffee with the most caffeine and fewest calories](2021/2021-12-21/final_plot.jpeg)
+
 ## 2021-12-14
 
-![What makes a Spice Girls Song Danceable](2021/2021-12-14/final_plot.jpeg)
+![What makes a Spice Girls song danceable](2021/2021-12-14/final_plot.jpeg)
 
 ## 2021-12-07
 
