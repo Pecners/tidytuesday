@@ -13,6 +13,10 @@ better.
 Submissions
 ================
 
+## 2022-01-04
+
+![Where to see snowy owls in Wisconsin](2022/2022-01-04/final_plot.png)
+
 ## 2021-12-21
 
 ![Starbucks coffee with the most caffeine and fewest calories](2021/2021-12-21/final_plot.jpeg)
