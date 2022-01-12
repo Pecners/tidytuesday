@@ -13,6 +13,11 @@ better.
 Submissions
 ================
 
+## 2022-01-11
+
+![Honey bee stressors and colony loss](2022/2022-01-11/final_plot.png)
+
+
 ## 2022-01-04
 
 ![Where to see snowy owls in Wisconsin](2022/2022-01-04/final_plot.png)
