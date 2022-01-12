@@ -1,3 +1,7 @@
+# This code is copied directly from Hadley Wickham's
+# ggplot 2 book, specifically the case study on extensions:
+# https://ggplot2-book.org/spring1.html
+
 create_spring <- function(x, y, xend, yend, diameter = 1, tension = 0.75, n = 50) {
   if (tension <= 0) {
     rlang::abort("`tension` must be larger than zero.")
