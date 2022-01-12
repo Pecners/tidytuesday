@@ -4,6 +4,7 @@ library(maps)
 library(sf)
 library(emojifont)
 library(ggtext)
+library(corrr)
 
 data <- tidytuesdayR::tt_load("2022-01-11")
 colony <- data$colony
