@@ -102,7 +102,7 @@ all %>%
                  "</span>") +
   geom_hline(yintercept = 0, linetype = 4) +
   scale_y_continuous(limits = c(-.5, .5), breaks = c(-.5, .5), 
-                     labels = c("Trash Can\nFood", "Chocolaty\nHeaven")) +
+                     labels = c("Trash Can\nFood", "Chocolaty\nGoodness")) +
   coord_flip() +
   theme_minimal() +
   theme(panel.grid = element_blank(),
