@@ -13,6 +13,10 @@ better.
 Submissions
 ================
 
+## 2022-01-18
+
+![What makes chocolate recommendable or not](2022/2022-01-18/final_plot.png)
+
 ## 2022-01-11
 
 ![Honey bee stressors and colony loss](2022/2022-01-11/final_plot.png)
