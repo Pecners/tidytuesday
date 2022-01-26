@@ -7,6 +7,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 Submissions
 ================
 
+## 2022-01-25
+
+![Game rating by game theme/series](2022/2022-01-25/final_plot.png)
+
 ## 2022-01-18
 
 ![What makes chocolate recommendable or not](2022/2022-01-18/final_plot.png)
