@@ -136,7 +136,7 @@ t %>%
        "<span style='color:" %+% orange %+% "'>**popular**</span> " %+%
        "and <span style='color:" %+% brown %+% "'>**unpopular**</span> " %+%
        "dog breeds?",
-       subtitle = "No barking, but drooling is okay. <span style='color:" %+%
+       subtitle = "No barking, drooling is okay. <span style='color:" %+%
          orange %+% "'>**Popular**</span> breeds bark A LOT less than " %+%
          "<span style='color:" %+% brown %+% "'>**unpopular**</span> breeds, " %+%
          "but they drool more!",
