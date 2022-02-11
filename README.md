@@ -7,6 +7,11 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 Submissions
 ================
 
+## 2022-02-08
+
+![Hometowns of the Tuskegee Airmen](2022/2022-02-08/final_plot.png)
+
+
 ## 2022-02-01
 
 ![Popular and unpopular dog breed trait comparison](2022/2022-02-01/final_plot.png)
