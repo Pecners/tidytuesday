@@ -1,22 +1,26 @@
+# This script will work as is, no need to run
+# messy_geocoding.R if you have the
+# geocoded_hometowns.rda file. If you don't have it,
+# work though the messy_geocoding script.
+
 library(tidyverse)
+library(sf)
+library(tigris)
+library(rnaturalearth)
+library(osmdata)
 library(showtext)
 library(ggtext)
-library(lubridate)
-library(sf)
-library(ggmap)
-library(tidygeocoder)
-library(osmdata)
-library(ggsflabel)
 
-# Helper function
+# Helper function for long text
+
 `%+%` <- function(x, y) paste0(x, y)
 
-# Load Data
+# Get data
+
 data <- tidytuesdayR::tt_load("2022-02-08")
 airman <- data$airmen
 
-m <- airman %>%
-  filter(state %in% missing)
+# Fix certain states
 
 airman <- airman %>%
   mutate(state = case_when(state == "KN" ~ "KY",
@@ -27,40 +31,59 @@ airman <- airman %>%
                            state == "Haiti" ~ "HT",
                            TRUE ~ state)) 
 
+# Load geocoded data
+
 d <- read_rds("2022/2022-02-08/geocoded_hometowns.rda")
 
 f_geo <- d %>%
-  mutate(lat = case_when(is.na(lat) ~ 31.423331, 
-                         TRUE ~ lat),
-         long = case_when(is.na(long) ~ -74.752245,
-                          TRUE ~ long)) %>%
   st_as_sf(., coords = c("long", "lat"), crs = 4326)
+
+# Group by place for points in map
 
 ga <- f_geo %>%
   mutate(place = case_when(is.na(state) ~ "Unknown",
-                           state == "Unk" & m == "Unk" ~ "Unknown",
+                           state == "Unk" ~ "Unknown",
+                           state == "Unknown" ~ "Unknown",
                            state == "HT" ~ "Port au Prince, HT",
                            TRUE ~ paste(m, state, sep = ", "))) %>%
   group_by(place) %>%
   summarise(n = n())
 
-
-
-# Font to be used in plot
-font_add_google("Coda", "c")
-showtext_auto()
-#font_add_google("Gochi Hand", "gh")
+# Group by state 
 
 a_states <- airman %>%
   mutate(state = str_to_upper(state)) %>%
   group_by(state) %>%
   tally()
 
+# Get states sf objects
 
-states <- tigris::states()
+states <- states()
 
-gl <- rnaturalearth::ne_download(type = "lakes", category = "physical", scale = "large")  %>%
-  st_as_sf(., crs = st_crs(states))
+# Remove states we won't be plotting
+
+not_states <- c("Commonwealth of the Northern Mariana Islands",
+                "Alaska",
+                "Puerto Rico",
+                "Hawaii",
+                "American Samoa",
+                "Guam")
+
+states_skinny <- states %>%
+  filter(!NAME %in% not_states) 
+
+# Get Great Lakes and oceans so we can erase the water from map
+
+gl <- ne_download(type = "lakes", category = "physical", scale = "large")  %>%
+  st_as_sf() %>%
+  st_transform(., crs = st_crs(states_skinny))
+
+l <- ne_download(type = "land", category = "physical", scale = "large")  %>%
+  st_as_sf() %>%
+  st_transform(., crs = st_crs(states_skinny))
+
+# gl now has a lot of lakes, need to specify our 
+# Great Lakes
 
 lakes <- c("Lake Erie",
            "Lake Michigan",
@@ -70,24 +93,15 @@ lakes <- c("Lake Erie",
 
 gl <- gl %>%
   filter(name %in% lakes) %>%
-  st_transform(crs = st_crs(states))
+  st_transform(crs = st_crs(states)) 
 
-not_states <- c("Commonwealth of the Northern Mariana Islands",
-                "Alaska",
-                "Puerto Rico",
-                "Hawaii",
-                "American Samoa",
-                "United States Virgin Islands",
-                "Guam")
-
-states_skinny <- states %>%
-  filter(!NAME %in% not_states) 
-
-for (i in 1:nrow(gl)) {
-  states_skinny <- st_difference(states_skinny, gl[i,])
-}
+# I had trouble using API services to get Haiti boundaries,
+# so I downloaded the shapefile
 
 haiti_sf <- st_read("2022/2022-02-08/shapefiles/haiti/haiti_boundaries.shp")
+
+# I decided to keep the Dominican Republic so the island doesn't 
+# look weird when plotted
 
 h <- haiti_sf %>%
   filter(admin_leve == 2) %>%
@@ -95,6 +109,8 @@ h <- haiti_sf %>%
   select(geometry, STUSPS) %>%
   group_by(STUSPS) %>%
   summarise()
+
+# Also need Trinidad and Tobago
 
 tb  <- opq(bbox = "Trinidad") %>%
   add_osm_feature(key = "boundary", value = "administrative") %>%
@@ -105,29 +121,14 @@ tb_sf <- tb$osm_multipolygons %>%
   select(geometry) %>%
   mutate(STUSPS = "TD")
 
-virgin  <- opq(bbox = "United States Virgin Islands") %>%
-  add_osm_feature(key = "boundary", value = "administrative") %>%
-  osmdata_sf()
-
-v <- virgin$osm_multipolygons %>%
-  filter(str_detect(name, "Virgin Islands")) %>%
-  select(geometry) %>%
-  mutate(STUSPS = c("BVI", "VI"))
-  
-
-
-not_us <- bind_rows(h, tb_sf, v)
+not_us <- bind_rows(h, tb_sf)
 
 with_others <- states_skinny %>%
   bind_rows(., not_us)
 
-o <- rnaturalearth::ne_download(type = "ocean", category = "physical", scale = "large")  %>%
-  st_as_sf(., crs = st_crs(states_skinny))
 
-l <- rnaturalearth::ne_download(type = "land", category = "physical", scale = "large")  %>%
-  st_as_sf(., crs = st_crs(states_skinny))
 
-l <- st_transform(l, crs = st_crs(states_skinny))
+# This intersection will limit borders to land
 
 ll <- st_intersection(with_others, l)
 
@@ -136,7 +137,11 @@ missing <- anti_join(a_states, ll, by = c("state" = "STUSPS")) %>%
 
 ll_w_a <- left_join(ll, a_states, by = c("STUSPS" = "state"))
 
+# Need to remove Great Lakes
+
 f <- st_difference(ll_w_a, st_union(gl))
+
+# Set up binning
 
 ff <- f %>%
   mutate(n = replace_na(n, 0)) %>%
@@ -150,7 +155,10 @@ ff <- f %>%
                                   "11 - 50",
                                   "51 - 100",
                                   "100+")))
-# Define colors
+
+# Define colors, based on WEB DuBois Plot:
+# https://github.com/ajstarks/dubois-data-portraits/tree/master/challenge/2022
+
 brown <- "#6B503B"
 yellow <- "#DCA816"
 red <- "#B2223F"
@@ -158,21 +166,10 @@ greige <- "#DDCFBE"
 pink <- "#D5AFA7"
 bg <- "#DDCFC0"
 
-c <- tibble(
-  lat = 32,
-  long = -70
-) %>%
-  st_as_sf(., coords = c("long", "lat"), crs = 4326)
+# Font to be used in plot
 
-labels <- ga %>%
-  filter(place %in% c("Unknown", 
-                      "Port of Spain, TD",
-                      "Port au Prince, HT",
-                      "St. Croix, VA")) %>%
-  mutate(label = case_when(place == "Unknown" ~ "Twelve airmen with unknown hometowns",
-                           place == "Port of Spain, TD" ~ "Trinidad and Tobago",
-                           place == "Port au Prince, HT" ~ "Haiti",
-                           TRUE ~ "US Virgin Islands"))
+font_add_google("Coda", "c")
+showtext_auto()
 
 t <- ff %>%
   ggplot(aes(fill = b)) +
@@ -186,7 +183,7 @@ t <- ff %>%
   geom_sf_text(data = ga %>% filter(place == "Port au Prince, HT"), aes(geometry = geometry),
                inherit.aes = FALSE, nudge_y = -200000,
                label = "HAITI", size = 3, family = "c") +
-  geom_sf_text(data = ga %>% filter(place == "St. Croix, VA"), aes(geometry = geometry),
+  geom_sf_text(data = ga %>% filter(place == "St. Croix, VI"), aes(geometry = geometry),
                inherit.aes = FALSE, nudge_x = 100000, hjust = 0, family = "c",
                label = str_wrap("US VIRGIN ISLANDS", 15), lineheight = 1, size = 3) +
   geom_sf_text(data = ga %>% filter(place == "Port of Spain, TD"), aes(geometry = geometry),
@@ -222,3 +219,4 @@ t <- ff %>%
 
 ggsave(t, filename = "2022/2022-02-08/final_plot.png", device = "png",
        bg = bg)
+
