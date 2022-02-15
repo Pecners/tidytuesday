@@ -7,6 +7,11 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 Submissions
 ================
 
+## [2022-02-15](2022/2022-02-15/final_plot.R)
+
+![Slaves and free negroes.](2022/2022-02-15/final_plot.png)
+
+
 ## [2022-02-08](2022/2022-02-08/final_plot.R)
 
 ![Hometowns of the Tuskegee Airmen](2022/2022-02-08/final_plot.png)
