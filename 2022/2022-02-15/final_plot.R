@@ -92,7 +92,7 @@ t <- f %>%
              color = bg) +
   geom_text(data = f %>%
               filter(group == "Free"), aes(y = 100.4, label = label),
-            hjust = 0, size = 4) +
+            hjust = 0, size = 4, family = "bj") +
   coord_flip(ylim = c(97.0, 101), xlim = c(ymd("1870-01-01"), ymd("1790-01-01")),
              clip = "off") +
   annotate(geom = "text", x = ymd("1786-01-01"), y = 100.6,
@@ -107,6 +107,7 @@ t <- f %>%
         axis.ticks.x = element_line(color = alpha("black", .5)),
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 16, margin = margin(r = 15)),
+        axis.text = element_text(family = "bj"),
         plot.background = element_blank(),
         panel.background = element_blank(),
         panel.grid = element_blank(),
