@@ -7,6 +7,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 Submissions
 ================
 
+## [2022-02-22](2022/2022-02-22/final_plot.R)
+
+![Political rights variance.](2022/2022-02-22/final_plot.png)
+
 ## [2022-02-15](2022/2022-02-15/final_plot.R)
 
 ![Slaves and free negroes.](2022/2022-02-15/final_plot.png)
