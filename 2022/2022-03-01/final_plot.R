@@ -68,13 +68,13 @@ top10 <- per_cap %>%
   theme(panel.grid = element_blank(),
         text = element_text(family = "zc"),
         axis.text.x = element_blank(),
-        plot.title = element_text(size = 20, color = "yellow", hjust = 0,
+        plot.title = element_text(size = 20, color = "#222d3d", hjust = 0,
                                   margin = margin(t = 10, b = 10)),
         plot.subtitle = element_text(color = "#222d3d"),
         plot.title.position = "plot",
-        axis.text.y = element_text(color = "yellow", size = 16)) +
+        axis.text.y = element_text(color = blue, size = 16)) +
   labs(y = "", x = "",
-       title = "Top 10 counties in yellow",
+       title = "Top 10 Counties",
        subtitle = "(Stations per 100k residents)")
 
 map <- wi_trim %>%
