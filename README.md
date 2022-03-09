@@ -7,6 +7,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 Submissions
 ================
 
+## [2022-03-08](2022/2022-03-08/final_plot.R)
+
+![Growth in Erasmus participation by top 25 countries.](2022/2022-03-08/final_plot.png)
+
 ## [2022-03-01](2022/2022-03-01/final_plot.R)
 
 ![Electric charging stations in Wisconsin.](2022/2022-03-01/final_plot.png)
