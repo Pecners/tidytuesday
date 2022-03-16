@@ -105,7 +105,7 @@ daily_subs %>%
                                        lineheight = 1.25, size = 9,
                                        color = "grey40")) +
   labs(title = "Daily package releases on the Comprehensive R Archive Network (CRAN)",
-       y = "", x = "",
+       y = "Daily Release Count", x = "",
        caption = glue("Data shown spans from Jan. 1st, 2005 to Oct. 9, 2021. Two dates were ",
                       "removed: Jan. 7th, 2020 (123 total submissions) is clipped from the plot ",
                       "but included in the moving average calculation, whereas ",
