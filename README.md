@@ -6,6 +6,9 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-03-15](2022/2022-03-15/final_plot.R)
+
+![CRAN submissions from 2005 to 2021.](2022/2022-03-15/final_plot.png)
 
 ## [2022-03-08](2022/2022-03-08/final_plot.R)
 
