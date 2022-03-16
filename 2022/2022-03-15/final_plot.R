@@ -100,7 +100,7 @@ daily_subs %>%
   theme(text = element_text(family = "ibm"),
         panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
-        plot.title = element_text(face = "bold"),
+        plot.title = element_text(face = "bold", hjust = .5),
         plot.caption = element_textbox_simple(width = unit(8.5, "in"), hjust = 0,
                                        lineheight = 1.25, size = 9,
                                        color = "grey40")) +
