@@ -1,3 +1,11 @@
+##############################################################
+# This plot was inspired by Erin Davis' viral plot           #
+# https://twitter.com/erindataviz/status/1489009794245541888 #
+#                                                            #
+# I used her explainer blog post as a guide, as well:        #
+# https://erdavis.com/2022/02/09/how-i-made-the-viral-map/   #
+##############################################################
+
 library(tidyverse)
 library(glue)
 library(showtext)
@@ -11,6 +19,8 @@ data <- tidytuesdayR::tt_load("2022-03-22")
 babes <- data$babynames
 rm(data)
 
+# Calculate starting letter props per year
+
 letters <- babes %>%
   mutate(start_letter = str_sub(name, 1, 1)) %>%
   group_by(year, sex, start_letter) %>%
@@ -19,6 +29,8 @@ letters <- babes %>%
   group_by(year, sex) %>%
   mutate(perc = total / sum(total))
 
+# Set up plot aesthetics 
+
 font_add_google("DM Serif Display", "sd")
 showtext_auto()
 
@@ -26,6 +38,8 @@ blue <- "#63b9f2"
 pink <- "#fc9fb1"
 bg <- "grey90"
 bg2 <- "grey97"
+
+# Create plots for each letter
 
 plots <- map(LETTERS[2:26], function(x) {
   letters %>%
@@ -49,6 +63,10 @@ plots <- map(LETTERS[2:26], function(x) {
 
 names(plots) <- LETTERS[2:26]
 
+# Create blank plot for spacer.
+# Works better than plot_spacer() because
+# I can control margins
+
 blank <- letters %>%
   filter(start_letter == "A") %>%
   ggplot(aes(year, y = 0)) +
@@ -61,6 +79,8 @@ blank <- letters %>%
         legend.position = "none",
         plot.margin = margin(rep(1, 4)),
         aspect.ratio = .75)
+
+# Use A as legend, set up labels
 
 labs <- tibble(
   x = c(1879, 1879,
@@ -81,6 +101,8 @@ tlabs <- tibble(
   l = c(glue("<span style='color:{blue}'>**% of male names**<span>"),
         glue("<span style='color:{pink}'>**% of female names**<span>"))
 )
+
+# Create A legend plot
 
 legend <- letters %>%
   filter(start_letter == "A") %>%
@@ -117,6 +139,8 @@ legend <- letters %>%
         plot.margin = margin(rep(1, 4)),
         aspect.ratio = .75)
 
+# Create title
+
 title <- ggplot() +
   theme_map() +
   geom_text(aes(x = 0, y = 20), size = 10,
@@ -135,6 +159,8 @@ title <- ggplot() +
   coord_cartesian(clip = "off") +
   theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))
 
+# Create caption
+
 cap <- ggplot() +
   theme_map() +
   geom_textbox(aes(x = 10, y = 0),
@@ -149,6 +175,8 @@ cap <- ggplot() +
   coord_cartesian(clip = "off") +
   theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))
 
+# Set layout for patchwork
+
 layout <- c(
   area(1,1,2,3), # Title
   area(1,4,2,5), # A guide
@@ -160,6 +188,7 @@ layout <- c(
   area(7, 6) # caption
 )
 
+# Create patchwork
 
 wrap_plots(title, legend,
   plots$B,  plots$C,  plots$D,  
