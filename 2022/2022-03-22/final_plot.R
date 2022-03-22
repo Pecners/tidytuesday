@@ -42,6 +42,19 @@ bg2 <- "grey97"
 # Create plots for each letter
 
 plots <- map(LETTERS[2:26], function(x) {
+  # For some reason the rightmost column was 
+  # getting wider margins, this fixed it
+  
+  if (x %in% c("C", "I", "O", "U")) {
+    r <- 0
+  } else {
+    r <- 1
+  }
+  if (x %in% c("D", "J", "P", "V")) {
+    l <- 0
+  } else {
+    l <- 1
+  }
   letters %>%
     filter(start_letter == x) %>%
     ggplot(aes(year, perc, fill = sex)) +
@@ -55,30 +68,13 @@ plots <- map(LETTERS[2:26], function(x) {
     theme(plot.background = element_rect(fill = bg2, linetype = 0),
           panel.background = element_rect(fill = bg, linetype = 0),
           legend.position = "none",
-          plot.margin = margin(rep(1, 4)),
+          plot.margin = margin(1, r, 1, l),
           aspect.ratio = .75)
   
 })
 
 
 names(plots) <- LETTERS[2:26]
-
-# Create blank plot for spacer.
-# Works better than plot_spacer() because
-# I can control margins
-
-blank <- letters %>%
-  filter(start_letter == "A") %>%
-  ggplot(aes(year, y = 0)) +
-  geom_area() +
-  scale_y_continuous(limits = c(0, .5), expand = c(0, 0)) +
-  scale_x_continuous(expand = c(0, 0)) +
-  theme_void() +
-  theme(plot.background = element_rect(fill = bg, color = NA),
-        panel.background = element_rect(fill = bg, color = NA),
-        legend.position = "none",
-        plot.margin = margin(rep(1, 4)),
-        aspect.ratio = .75)
 
 # Use A as legend, set up labels
 
@@ -136,7 +132,7 @@ legend <- letters %>%
   theme(plot.background = element_rect(fill = bg2, linetype = 0),
         panel.background = element_rect(fill = bg, linetype = 0),
         legend.position = "none",
-        plot.margin = margin(rep(1, 4)),
+        plot.margin = margin(rep(0, 4)),
         aspect.ratio = .75)
 
 # Create title
@@ -173,7 +169,7 @@ cap <- ggplot() +
   scale_x_continuous(limits = c(0,10)) +
   scale_y_continuous(limits = c(0, 10)) +
   coord_cartesian(clip = "off") +
-  theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))
+  theme(plot.margin= margin(rep(0, 4)))
 
 # Set layout for patchwork
 
@@ -190,7 +186,8 @@ layout <- c(
 
 # Create patchwork
 
-wrap_plots(title, legend,
+wrap_plots(title, 
+           legend,
   plots$B,  plots$C,  plots$D,  
   plots$E,  plots$F,  plots$G,  plots$H,  plots$I,  
   plots$J,  plots$K,  plots$L,  plots$M,  
