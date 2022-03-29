@@ -1,16 +1,9 @@
-##############################################################
-# This plot was inspired by Erin Davis' viral plot           #
-# https://twitter.com/erindataviz/status/1489009794245541888 #
-#                                                            #
-# I used her explainer blog post as a guide, as well:        #
-# https://erdavis.com/2022/02/09/how-i-made-the-viral-map/   #
-##############################################################
-
 library(tidyverse)
 library(glue)
 library(showtext)
 library(ggtext)
 library(patchwork)
+library(scales)
 library(ggthemes)
 
 # Load data
@@ -19,7 +12,7 @@ data <- tidytuesdayR::tt_load("2022-03-22")
 babes <- data$babynames
 rm(data)
 
-# Calculate starting letter props per year
+# Calculate letter frequency by year
 
 letters <- babes %>%
   mutate(start_letter = str_sub(name, 1, 1)) %>%
@@ -29,32 +22,19 @@ letters <- babes %>%
   group_by(year, sex) %>%
   mutate(perc = total / sum(total))
 
-# Set up plot aesthetics 
+# Set plot palette, font
 
 font_add_google("DM Serif Display", "sd")
 showtext_auto()
 
-blue <- "#63b9f2"
-pink <- "#fc9fb1"
-bg <- "grey90"
-bg2 <- "grey97"
+blue <- "#3bbbf7"
+pink <- "#ff96ad"
+bg <- "grey97"
 
-# Create plots for each letter
+# Make plot for each letter except A,
+# which will serve as a guide
 
 plots <- map(LETTERS[2:26], function(x) {
-  # For some reason the rightmost column was 
-  # getting wider margins, this fixed it
-  
-  if (x %in% c("C", "I", "O", "U")) {
-    r <- 0
-  } else {
-    r <- 1
-  }
-  if (x %in% c("D", "J", "P", "V")) {
-    l <- 0
-  } else {
-    l <- 1
-  }
   letters %>%
     filter(start_letter == x) %>%
     ggplot(aes(year, perc, fill = sex)) +
@@ -65,10 +45,10 @@ plots <- map(LETTERS[2:26], function(x) {
     scale_x_continuous(expand = c(0, 0)) +
     scale_fill_manual(values = c(pink, blue)) +
     theme_void() +
-    theme(plot.background = element_rect(fill = bg2, linetype = 0),
-          panel.background = element_rect(fill = bg, linetype = 0),
+    theme(plot.background = element_rect(fill = bg, linetype = 0),
+          panel.background = element_rect(fill = glue("grey90"), linetype = 0),
           legend.position = "none",
-          plot.margin = margin(1, r, 1, l),
+          plot.margin = margin(rep(1, 4)),
           aspect.ratio = .75)
   
 })
@@ -76,133 +56,150 @@ plots <- map(LETTERS[2:26], function(x) {
 
 names(plots) <- LETTERS[2:26]
 
-# Use A as legend, set up labels
+# Set up a blank plot to use as a spacer.
+# This worked better than plot_spacer() because
+# it allows me to control margins
+
+blank <- letters %>%
+  filter(start_letter == "A") %>%
+  ggplot(aes(year, y = 0)) +
+  geom_area() +
+  scale_y_continuous(limits = c(0, .5), expand = c(0, 0)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  theme_void() +
+  theme(plot.background = element_rect(fill = bg, color = NA),
+        panel.background = element_rect(fill = bg, color = NA),
+        legend.position = "none",
+        plot.margin = margin(rep(1, 4)),
+        aspect.ratio = .75)
+
+# Set up labels for A, the guide plot
 
 labs <- tibble(
-  x = c(1879, 1879,
-        1880, 2017),
-  y = c(0, .5,
-        -.01, -.01),
-  l = c("0%", "50%",
-        "1880", "2017"),
-  h = c(1, 1,
-        0, 1),
-  v = c(0, 1,
-        1, 1)
+  x = c(1880, 2017),
+  y = -.04,
+  l = c("1880", "2017"),
+  h = c(0, 1)
 )
 
-tlabs <- tibble(
-  x = 2017,
-  y = c(.05, .18),
-  l = c(glue("<span style='color:{blue}'>**% of male names**<span>"),
-        glue("<span style='color:{pink}'>**% of female names**<span>"))
+ylabs <- tibble(
+  x = c(1879),
+  y = c(0, .5),
+  l = c("0%", "50%"),
+  h = c(1),
+  v = c(0, 1)
 )
 
-# Create A legend plot
+yright <- tibble(
+  x = 2018,
+  y = c(.04, .18),
+  l = c(glue("<span style='color:{blue}'>**% of male names**</span>"), 
+        glue("<span style='color:{pink}'>**% of female names**</span>")),
+  h = 0
+)
+
+# Create the A guide plot
 
 legend <- letters %>%
   filter(start_letter == "A") %>%
   ggplot(aes(year, perc, fill = sex)) +
   geom_area() +
+  geom_rect(xmin = 1880, xmax = 2017,
+            ymin = -.1, ymax = 0, fill = bg) +
+  geom_rect(xmin = 1860, xmax = 1880,
+            ymin = -.1, ymax = .5, fill = bg) +
+  geom_rect(xmin = 2017, xmax = 2027,
+            ymin = -.1, ymax = .5, fill = bg) +
+  geom_text(data = labs, aes(label = l, x = x, y = y, hjust = h),
+            inherit.aes = FALSE, size = 3) +
+  geom_text(data = ylabs, aes(label = l, x = x, y = y, hjust = h, vjust = v),
+            size = 3, inherit.aes = FALSE) +
+  geom_richtext(data = yright, aes(label = l, x = x, y = y, hjust = h),
+            size = 3, inherit.aes = FALSE, fill = NA, label.color = NA) +
   annotate(geom = "text", x = 1948.5, y = .4, label = "A",
            family = "sd", size = 6) +
-  # bottom white rect
-  geom_rect(xmin = 1860, xmax = 2027,
-            ymin = -.05, ymax = 0, fill = bg2) +
-  # left white rect
-  geom_rect(xmin = 1860, xmax = 1880,
-            ymin = -.05, ymax = .5, fill = bg2) +
-  # right white rect
-  geom_rect(xmin = 2017, xmax = 2027,
-            ymin = -.05, ymax = .5, fill = bg2) +
-  # axis labels
-  geom_text(data = labs, aes(x = x, y = y, vjust = v,
-                             label = l, hjust = h),
-            inherit.aes = FALSE, size = 3) +
-  # right text
-  geom_richtext(data = tlabs, aes(x = x, y = y, label = l),
-               hjust = 0, label.color = NA, fill = NA,
-               inherit.aes = FALSE, size = 3) +
-  
-  scale_y_continuous(limits = c(-.05, .5), expand = c(0, 0)) +
-  scale_x_continuous(expand = c(0, 0), limits = c(1860, 2027)) +
+  scale_y_continuous(limits = c(-.1, .5), expand = c(0, 0),
+                     breaks = c(0, .5), labels = percent) +
+  scale_x_continuous(limits = c(1860, 2027), expand = c(0, 0)) +
   scale_fill_manual(values = c(pink, blue)) +
   coord_cartesian(clip = "off") +
   theme_void() +
-  theme(plot.background = element_rect(fill = bg2, linetype = 0),
-        panel.background = element_rect(fill = bg, linetype = 0),
+  theme(plot.background = element_rect(fill = bg, linetype = 0),
+        panel.background = element_rect(fill = glue("grey90"), linetype = 0),
         legend.position = "none",
-        plot.margin = margin(rep(0, 4)),
-        aspect.ratio = .75)
+        plot.margin = margin(1,1,1,-10),
+        aspect.ratio = .75) +
+  labs(y = "", x = "")
 
-# Create title
+# Set up the plot title
 
 title <- ggplot() +
   theme_map() +
-  geom_text(aes(x = 0, y = 20), size = 10,
-            label = "Alphabetical Order", 
-            family = "sd") +
-  geom_textbox(aes(x = 0, y = 5),
-               label = glue("The most popular starting letter for ",
-                            "<span style='color:{pink}'>**female**</span> ",
-                            "baby names in the US was **M** in 1880 ",
-                            "(22% of female names) and **A** in 2017 (18%). ",
-                            "For <span style='color:{blue}'>**males**</span>, ",
-                            "it was **J** in 1880 (20%) and in 2017 (13%)."),
-               width = unit(3.5, "in"),
-               size = 5, fill = NA, box.size = 0) +
-  scale_y_continuous(limits = c(0, 25)) +
+  geom_richtext(aes(x = 0, y = 25), 
+                label = glue("Alphabetical Order"),
+            family = "sd", size = 10, fill = NA, label.color = NA,
+            hjust = 0) +
+  geom_textbox(aes(x = 0, y = 7), size = 5,
+                label = glue("The most popular starting letter ",
+                             "for <span style='color:{pink}'>**female**</span> ",
+                             "baby names in the US was **M** in 1880 ",
+                             "(22% of female names) ",
+                             "and **A** in 2017 (18%). For <span style='color:{blue}'>",
+                             "**males**</span>, it was **J** ",
+                             "in 1880 (20%) and in 2017 (13%)."),
+                fill = NA, width = unit(3.5, "in"), hjust = 0, box.size = 0) +
   coord_cartesian(clip = "off") +
-  theme(plot.margin=grid::unit(c(0,0,0,0), "mm"))
+  scale_y_continuous(limits = c(0, 35), expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 25), expand = c(0,0)) +
+  theme(plot.margin= margin(c(0,0,0,0), "mm"))
 
-# Create caption
+# Set up plot caption
 
 cap <- ggplot() +
   theme_map() +
-  geom_textbox(aes(x = 10, y = 0),
-               label = paste0("Analysis and graphic by Spencer Schien (@MrPecners)<br>",
-                            "Data from {babynames} R package"),
-               width = unit(3.5, "in"), hjust = 1, halign = 1, vjust = 0,
-               size = 2.5, fill = NA, box.size = 0, color = "grey50",
-               box.margin = margin(0,0,0,0),
-               box.padding = margin(0,0,0,0)) +
-  scale_x_continuous(limits = c(0,10)) +
-  scale_y_continuous(limits = c(0, 10)) +
+  #geom_vline(xintercept = 25) +
+  geom_textbox(aes(x = 25, y = 0), size = 1.75, vjust = 0, hjust = 1, halign = 1,
+               label = paste0("Graphic by Spencer Schien (@MrPecners), ",
+                            "data from the {babynames} R package."),
+               fill = NA, width = unit(3, "in"), box.size = 0,
+               box.margin = margin(0), box.padding = margin(0),
+               color = "grey50") +
   coord_cartesian(clip = "off") +
-  theme(plot.margin= margin(rep(0, 4)))
+  scale_y_continuous(limits = c(0, 35), expand = c(0, 0)) +
+  scale_x_continuous(limits = c(0, 25), expand = c(0,0)) +
+  theme(plot.margin= margin(c(0,0,0,0), "mm"),
+        plot.background = element_rect(fill = bg, color = NA))
 
-# Set layout for patchwork
+# Set up layout for patchwork
+
+s <- 2
 
 layout <- c(
-  area(1,1,2,3), # Title
-  area(1,4,2,5), # A guide
-  area(3, 4), area(3,5), area(3,6), # Row 1: B-D
-  area(4,1), area(4,2), area(4,3), area(4,4), area(4,5), area(4,6), # Row 2: E-J
-  area(5,1), area(5,2), area(5,3), area(5,4), area(5,5), area(5,6), # Row 3: K-P
-  area(6,1), area(6,2), area(6,3), area(6,4), area(6,5), area(6,6), # Row 4: Q-V
-  area(7,1), area(7,2), area(7,3), area(7,4), # Row 5: W-Z
-  area(7, 6) # caption
+  area(1,1,s,3), area(1,4,2,5),
+  area(s+1, 4), area(s+1,5), area(s+1,6),
+  area(s+2,1), area(s+2,2), area(s+2,3), area(s+2,4), area(s+2,5), area(s+2,6),
+  area(s+3,1), area(s+3,2), area(s+3,3), area(s+3,4), area(s+3,5), area(s+3,6),
+  area(s+4,1), area(s+4,2), area(s+4,3), area(s+4,4), area(s+4,5), area(s+4,6),
+  area(s+5,1), area(s+5,2), area(s+5,3), area(s+5,4),
+  area(s+5, 6)
 )
 
-# Create patchwork
-
-wrap_plots(title, 
-           legend,
-  plots$B,  plots$C,  plots$D,  
+# Create pat
+wrap_plots(title, legend,
+          plots$B,  plots$C,  plots$D,  
   plots$E,  plots$F,  plots$G,  plots$H,  plots$I,  
   plots$J,  plots$K,  plots$L,  plots$M,  
   plots$N,  plots$O,  plots$P,  plots$Q,  
   plots$R,  plots$S,  plots$T,  
   plots$U,  plots$V ,  plots$W,  
-  plots$X,  plots$Y,  plots$Z,
-  cap,
+  plots$X,  plots$Y,  plots$Z, cap,
   design = layout) &
   plot_annotation(theme = theme(
-    plot.background = element_rect(fill = bg2, color = NA)
+    plot.background = element_rect(fill = bg, color = NA)
   ))
 
 
 
-ggsave(filename = "2022/2022-03-22/final_plot.png", device = "png", bg = bg2,
-       height = 7, width = 8)
 
+ggsave(filename = "2022/2022-03-22/final_plot.png", device = "png", bg = bg,
+       w = 8, h = 7)
