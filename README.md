@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-03-29](2022/2022-03-29/final_plot.R)
+
+![School expenditures on sports.](2022/2022-03-29/final_plot.png)
+
 ## [2022-03-22](2022/2022-03-22/final_plot.R)
 
 ![Starting letters of baby names.](2022/2022-03-22/final_plot.png)
