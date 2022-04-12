@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-04-12](2022/2022-04-12/final_plot.R)
+
+![Change in regional deaths from household air pullution, The Economist themed](2022/2022-04-12/final_plot.png)
+
 ## [2022-04-05](2022/2022-04-05/final_plot.R)
 
 ![Independent online news outlets.](2022/2022-04-05/final_plot.png)
