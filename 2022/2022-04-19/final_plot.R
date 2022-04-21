@@ -57,6 +57,7 @@ sent %>%
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor = element_blank(),
         legend.position = "none",
+        axis.text = element_text(family = "v"),
         plot.title.position = "plot",
         plot.title = element_text(family = "v", size = 26, face = "bold"),
         plot.subtitle = element_text(family = "v", size = 16),
