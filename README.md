@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-05-03](2022/2022-05-03/final_plot.R)
+
+![Solar and wind power prices](2022/2022-05-03/final_plot.png)
+
 ## [2022-04-19](2022/2022-04-19/final_plot.R)
 
 ![Net sentiment of NYT Cryptic Crossword answers](2022/2022-04-19/final_plot.png)
