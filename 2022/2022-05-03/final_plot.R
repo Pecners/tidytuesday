@@ -31,7 +31,7 @@ solar %>%
   labs(title = "Skyline Decline",
        subtitle = glue("Towering costs of <span style='color:{c[2]}'>**solar**</span> and ",
                        "<span style='color:{c[9]}'>**wind**</span> power are a thing of the past, ",
-                       "replaced by a much lower price horizon in recent years."),
+                       "with much lower prices on the horizon."),
        caption = "Graphic by Spencer Schien (@MrPecners) | Data from Berkeley Lab",
        y = "", x = "")
 
