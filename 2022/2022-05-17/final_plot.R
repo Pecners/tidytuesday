@@ -84,8 +84,8 @@ qplot(0:10, 0:10, geom="blank") +
            box.padding = margin(5,0,2,5)) +
   geom_textbox(data = tibble(1), color = c_trim[51], fill = c_trim[length(c_trim)],
                 x = 9.9, y = .1, hjust = 1, vjust = 0, box.size = 0,
-               label = glue("This wordcloud shows the prevalence ",
-                            "of words in the title of Eurovision songs, ",
+               label = glue("This word cloud shows the prevalence ",
+                            "of words in the titles of Eurovision songs, ",
                             "with the top 50 words in ",
                             "<span style='color:{c_trim[1]}'>**pink**</span>."), 
                 family = "julee", size = 7, minwidth = unit(3.5, "in"),
