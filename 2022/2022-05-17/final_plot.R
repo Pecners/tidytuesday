@@ -26,7 +26,8 @@ t <- eurovision %>%
   transmute(line = 1:nrow(eurovision),
             text = song) %>%
   unnest_tokens(word, text) %>%
-  anti_join(stops)
+  anti_join(stops) %>%
+  mutate(word = str_remove(word, "^\\w'"))
 
 # Get frequencies
 tidy <- t %>%
@@ -61,9 +62,9 @@ c_trim <- colors[ind]
 
 # Create wordcloud
 
-wordcloud2(tidy, figPath = "2022/2022-05-17/logo.png", size = 3, minRotation = 0,
+wordcloud2(tidy, figPath = "2022/2022-05-17/logo.png", size = 3,
            widgetsize = c(1200,1200), ellipticity = .9, gridSize = 10,
-           fontFamily = "Julee", color = c_trim, backgroundColor = "#2E2A2B")
+           fontFamily = "Julee", color = c_trim, backgroundColor = "white")
 
 # After creating the wordcloud, I open it in chrome and then 
 # save it here in the repo as heart.png
