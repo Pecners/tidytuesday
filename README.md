@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-05-17](2022/2022-05-17/final_plot.R)
+
+![Eurovision](2022/2022-05-17/final_plot.png)
+
 ## [2022-05-10](2022/2022-05-10/final_plot.R)
 
 ![NYTimes best sellers](2022/2022-05-10/final_plot.png)
