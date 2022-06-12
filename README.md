@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-06-07](2022/2022-06-07/final_plot.R)
+
+![Anti-LGBTQ Contributions](2022/2022-06-07/final_plot.png)
+
 ## [2022-05-31](2022/2022-05-31/final_plot.R)
 
 ![Axios Harris Poll](2022/2022-05-31/final_plot.png)
