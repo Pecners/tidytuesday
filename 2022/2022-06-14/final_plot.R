@@ -83,8 +83,8 @@ p <- long %>%
   #                   labels = c(rep("", 4), "Driest",
   #                             rep("", 4), "Wettest")) +
   scale_fill_manual(values = c_neg,
-                    labels = c(rep("", 4), "Driest",
-                               rep("", 4), "Wettest")) +
+                    labels = c("Driest", rep("", 4),
+                               "Wettest", rep("", 4))) +
   coord_curvedpolar(clip = "off") +
   theme_void() +
   theme(text = element_text(family = "fo"),
@@ -103,7 +103,8 @@ p <- long %>%
                                     margin = margin(t = -25, b = -30))) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE, 
                              label.theme = element_text(color = "white",
-                                                        size = 8))) +
+                                                        size = 8),
+                             label.position = "left")) +
   labs(fill = "",
        title = "Wisconsin Drought Conditions",
        subtitle = glue("The period from 2016 to 2021 (highlighted above) was a wet one in Wisconsin, ",
