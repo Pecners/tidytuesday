@@ -38,7 +38,7 @@ long %>%
 colors <- scico(n = 10, palette = "roma")
 
 # Inverting so it works with the plot correctly
-c_neg <- c(colors[1:5], colors[10:6])
+c_neg <- c(rev(colors[1:5]), rev(colors[10:6]))
 
 
 # Create df for custom axis labels
