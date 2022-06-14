@@ -38,7 +38,7 @@ long %>%
 colors <- scico(n = 10, palette = "roma")
 
 # Inverting so it works with the plot correctly
-c_neg <- c(colors[5:1], colors[6:10])
+c_neg <- c(colors[1:5], colors[10:6])
 
 
 # Create df for custom axis labels
@@ -83,8 +83,8 @@ p <- long %>%
   #                   labels = c(rep("", 4), "Driest",
   #                             rep("", 4), "Wettest")) +
   scale_fill_manual(values = c_neg,
-                    labels = c("Driest", rep("", 4),
-                               "Wettest", rep("", 4))) +
+                    labels = c(rep("", 4), "Driest", 
+                               rep("", 4), "Wettest")) +
   coord_curvedpolar(clip = "off") +
   theme_void() +
   theme(text = element_text(family = "fo"),
@@ -103,8 +103,7 @@ p <- long %>%
                                     margin = margin(t = -25, b = -30))) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE, 
                              label.theme = element_text(color = "white",
-                                                        size = 8),
-                             label.position = "left")) +
+                                                        size = 8))) +
   labs(fill = "",
        title = "Wisconsin Drought Conditions",
        subtitle = glue("The period from 2016 to 2021 (highlighted above) was a wet one in Wisconsin, ",
