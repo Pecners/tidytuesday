@@ -6,9 +6,9 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
-## [2022-07-26](2022/2022-07-26]/final_plot.R)
+## [2022-07-26](2022/2022-07-26/final_plot.R)
 
-![Murderbot](2022/2022-07-26]/final_plot.png)
+![Murderbot](2022/2022-07-26/final_plot.png)
 
 ## [2022-06-14](2022/2022-06-14/final_plot.R)
 
