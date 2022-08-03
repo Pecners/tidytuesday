@@ -136,13 +136,13 @@ title <- qplot() +
   geom_text(aes(x = 0, y = 1.5), label = "OREGON SPOTTED FROGS", size = 15,
             hjust = 0, family = "sis") +
   geom_textbox(aes(x = 0, y = .75), 
-               label = glue("Radio-telemetry data shows habitat use of ",
+               label = glue("Data from 2018 shows habitat use of ",
                             "<span style='color:{c1[2]}'>**male**</span> and ",
                             "<span style='color:{c2[2]}'>**female**</span> frogs ",
                             "at Crane Prairie Reservoir in Oregon. Herbaceous vegetation ",
                             "was the most popular structure for both sexes, and the river ",
                             "was the only habitat where males outnumbered females."), 
-               size = 6, width = unit(8.75, "in"), family = "n",
+               size = 6, width = unit(8.8, "in"), family = "n",
                hjust = 0, vjust = 1, box.size = 0, color = "grey50") +
   scale_y_continuous(limits = c(-1,2), expand = c(0,0)) +
   scale_x_continuous(limits = c(0, 1), expand = c(0,0)) +
@@ -236,7 +236,8 @@ male_plot <- qplot() +
   annotate(geom = "text", x = 0, y = 0, label = "One recorded\nmale",
            family = "n", vjust = -1, size = 5, lineheight = .9) +
   coord_sf(clip = "off") +
-  theme_void()
+  theme_void() +
+  theme(plot.margin = margin(t = 10))
 
 # set patchwork layout and plot ------------------------------------------
 
