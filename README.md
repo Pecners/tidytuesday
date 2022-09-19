@@ -6,6 +6,10 @@ for [TidyTuesday](https://github.com/rfordatascience/tidytuesday).
 
 Submissions
 ================
+## [2022-09-13](2022/2022-09-13/final_plot.R)
+
+![Bigfoot](2022/2022-09-13/final_plot.png)
+
 ## [2022-07-26](2022/2022-08-02/final_plot.R)
 
 ![Oregon spotted frog](2022/2022-08-02/final_plot.png)
